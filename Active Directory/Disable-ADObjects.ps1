@@ -16,10 +16,10 @@ $ExcludedComputers = @() # Add any computer name exceptions here
 
 $InactiveUsers = @(Get-ADUser -Filter * -Properties LastLogonDate, Enabled | 
     Where-Object { 
-                       ($_.Enabled -eq $True) -and 
-                       ($_.LastLogonDate -lt $TimeStamp) -and 
-                       ($_.LastLogonDate -ne $null) -and 
-                       ($_.SamAccountName -notin $ExcludedUsers) 
+        ($_.Enabled -eq $True) -and 
+        ($_.LastLogonDate -lt $TimeStamp) -and 
+        ($_.LastLogonDate -ne $null) -and 
+        ($_.SamAccountName -notin $ExcludedUsers) 
     })
 
 if ($InactiveUsers.Count -gt 0) {
@@ -39,11 +39,11 @@ else {
 
 $InactiveComputers = @(Get-ADComputer -Filter * -Properties LastLogonDate, Enabled | 
     Where-Object { 
-                           ($_.Enabled -eq $True) -and 
-                           ($_.LastLogonDate -lt $TimeStamp) -and 
-                           ($_.LastLogonDate -ne $null) -and 
-                           ($_.Name -notin $ExcludedComputers) -and 
-                           ($_.CN -ne "AZUREADSSOACC") 
+        ($_.Enabled -eq $True) -and 
+        ($_.LastLogonDate -lt $TimeStamp) -and 
+        ($_.LastLogonDate -ne $null) -and 
+        ($_.Name -notin $ExcludedComputers) -and 
+        ($_.CN -ne "AZUREADSSOACC") 
     })
 
 if ($InactiveComputers.Count -gt 0) {
@@ -89,8 +89,8 @@ if (!$InactiveComputersOU) {
 
 $DisabledUsers = @(Get-ADUser -Filter * -Properties Enabled, DistinguishedName | 
     Where-Object { 
-                       ($_.Enabled -eq $False) -and 
-                       ($_.DistinguishedName -notlike $('*' + $($InactiveUsersOU.DistinguishedName))) 
+        ($_.Enabled -eq $False) -and 
+        ($_.DistinguishedName -notlike $('*' + $($InactiveUsersOU.DistinguishedName))) 
     })
 
 if ($DisabledUsers.count -ne 0) {
@@ -110,8 +110,8 @@ else {
 
 $DisabledComputers = @(Get-ADComputer -Filter * -Properties Enabled, DistinguishedName | 
     Where-Object { 
-                           ($_.Enabled -eq $False) -and 
-                           ($_.DistinguishedName -notlike $('*' + $($InactiveComputersOU.DistinguishedName))) 
+        ($_.Enabled -eq $False) -and 
+        ($_.DistinguishedName -notlike $('*' + $($InactiveComputersOU.DistinguishedName))) 
     })
 
 if ($DisabledComputers.count -ne 0) {
