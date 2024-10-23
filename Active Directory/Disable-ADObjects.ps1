@@ -11,6 +11,8 @@ function Write-Log {
 
 $TimeStamp = (Get-Date).AddMonths(-3)
 
+Write-Log "Processing inactive users and computers since $TimeStamp"
+
 $ExcludedUsers = @() # Add any user account exceptions here
 $ExcludedComputers = @() # Add any computer name exceptions here
 
@@ -63,6 +65,8 @@ else {
 
 $InactiveUsersOUName = 'Disabled Users'
 $InactiveComputersOUName = 'Disabled Computers'
+
+Write-Log "Moving disabled users and computers to OUs: $InactiveUsersOUName and $InactiveComputersOUName"
 
 $InactiveUsersOU = Get-ADOrganizationalUnit -Filter * | Where-Object { $_.Name -eq $InactiveUsersOUName }
 $InactiveComputersOU = Get-ADOrganizationalUnit -Filter * | Where-Object { $_.Name -eq $InactiveComputersOUName }
