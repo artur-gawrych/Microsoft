@@ -2,15 +2,12 @@ function Export-MailboxStatistics {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [string]$CSVPath
+        [string]$CSVFile
     )
 
     begin {
-        if (!(Test-Path $CSVPath)) {
-            Write-Host "The path you have entered: '$CSVPath' does not exist. Please enter a valid path and try again." -ForegroundColor Red
-            exit
-        }
-    }
+            Write-Output "Stating the export...."
+         }
 
     process {
         try {
@@ -19,15 +16,15 @@ function Export-MailboxStatistics {
                 Select-Object DisplayName, UserPrincipalName, 
                 @{Name = 'LastLogonTime'; Expression = { (Get-MailboxStatistics $_).LastLogonTime } }, 
                 @{Name = 'Mailbox Size'; Expression = { (Get-MailboxStatistics $_).TotalItemSize } } |
-                Export-Csv -Path "$CSVPath\mailbox_stats.csv" -NoTypeInformation
+                Export-Csv -Path $CSVFile -NoTypeInformation
 
-            Write-Host "CSV exported to $CSVPath\mailbox_stats.csv" -ForegroundColor Green
+            Write-Output "CSV exported to $CSVFile"
         } catch {
             Write-Error "An error occurred while exporting the mailbox statistics: $_"
         }
     }
 
     end {
-        Write-Host "Mailbox statistics export completed." -ForegroundColor Yellow
+        Write-Output "Mailbox statistics export completed."
     }
 }
