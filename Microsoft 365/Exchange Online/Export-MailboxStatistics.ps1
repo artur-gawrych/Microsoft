@@ -1,3 +1,26 @@
+function Write-Log {
+    [CmdletBinding()]
+    param (
+        [string]$Message
+    )
+    
+    begin {
+        $LogLocation = "$env:USERPROFILE\AppData\Roaming\PowerShell\Logs"
+        if (!(Test-Path $LogLocation)){
+            New-Item -ItemType Directory -Path $LogLocation -Force
+        }
+        $LogTimestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+        $LogFileName = "PowerShell_$(Get-Date -Format 'yyyy_MM_dd').log"
+    }
+    
+    process {
+        $LogMessage = "$LogTimestamp - $Message"
+        Write-Output $LogMessage
+        Add-Content -Path "$LogLocation\$LogFileName" -Value $LogMessage
+    }
+    
+}
+
 function Export-MailboxStatistics {
     [CmdletBinding()]
     param(
@@ -6,7 +29,7 @@ function Export-MailboxStatistics {
     )
 
     begin {
-            Write-Output "Stating the export...."
+            Write-Log "Stating the export...."
          }
 
     process {
@@ -18,13 +41,13 @@ function Export-MailboxStatistics {
                 @{Name = 'Mailbox Size'; Expression = { (Get-MailboxStatistics $_).TotalItemSize } } |
                 Export-Csv -Path $CSVFile -NoTypeInformation
 
-            Write-Output "CSV exported to $CSVFile"
+            Write-Log "CSV exported to $CSVFile"
         } catch {
-            Write-Error "An error occurred while exporting the mailbox statistics: $_"
+            Write-Log "An error occurred while exporting the mailbox statistics: $_"
         }
     }
 
     end {
-        Write-Output "Mailbox statistics export completed."
+        Write-Log "Mailbox statistics export completed."
     }
 }
