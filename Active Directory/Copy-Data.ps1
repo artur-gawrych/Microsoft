@@ -28,11 +28,7 @@ function Copy-Data {
         [Parameter(Mandatory)]
         [string]$Destination,
         [Parameter(Mandatory)]
-        [string]$LogLocation,
-        [Parameter]
-        [string]$Options = "/E /ZB /copy:DAT /dcopy:DAT /R:0 /W:0 /V /",
-        [Parameter]
-        [string]$Logging = "/log:$("$LogLocation\$(Get-Date -f yyyy_MM_dd)_robocopy.log")"
+        [string]$LogLocation
     )
     
     begin {
@@ -44,7 +40,11 @@ function Copy-Data {
     
     process {
         Write-Log "Staring to copy data from $Source to $Destination"
-        robocopy $Source $Destination $Options $Logging
+
+        $Options = "/E /ZB /copy:DAT /dcopy:DAT /R:0 /W:0 /V /tee"
+        $Logging = "/log:$("$LogLocation\$(Get-Date -f yyyy_MM_dd)_robocopy.log")"
+
+        & robocopy $Source $Destination $Options.split(' ') $Logging
     }
     
     end {
