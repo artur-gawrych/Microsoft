@@ -48,6 +48,6 @@ function Copy-Data {
     }
     
     end {
-        Write-Log "Finisshed copying data. Please see the robocopy logs for more information locaated in $LogLocation"
+        Write-Log "Finished copying data. Please see the robocopy logs for more information located in $LogLocation"
     }
 }
